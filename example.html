@@ -43,7 +43,7 @@
           },
           () => error.textContent = "Could not get position. Have you allowed your browser and this website to check it?",
           {
-            throttleTime: 0 // here we specify that we want a geolocation callback at most once every 5 seconds
+            throttleTime: 5000 // here we specify that we want a geolocation callback at most once every 5 seconds
           });
       };
 
