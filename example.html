@@ -34,10 +34,11 @@
             const locationRecord = document.createElement("li");
             locationRecord.innerHTML = `<li>${timeElapsed} seconds: ${position.coords.latitude}, ${position.coords.longitude}</li>`;
             positions.appendChild(locationRecord);
+            locationRecord.scrollIntoView({ behavior: "smooth" });
           },
           () => error.textContent = "Could not get position. Have you allowed your browser and this website to check it?",
           {
-            throttleTime: 5000 // here we specify that we want a geolocation callback at most once every 5 seconds
+            throttleTime: 0 // here we specify that we want a geolocation callback at most once every 5 seconds
           });
       };
 
