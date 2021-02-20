@@ -1,7 +1,7 @@
 {
   window.GeolocationThrottle = {
     // a mapping of watchId => timeoutId that can be used to clear position watching
-    _timeoutIds: {},
+    _timeoutIds: new Map(),
 
     /**
      * Works just like navigator.geolocation.watchPosition, but adds one extra argument
@@ -40,12 +40,12 @@
               callback.apply(this, arguments);
 
               timeoutId = null;
-              window.GeolocationThrottle._timeoutIds[watchId] = null;
+              window.GeolocationThrottle._timeoutIds.delete(watchId);
             }, timeout);
 
             // we store the timeout id so that we can clear the timeout if clearWatch
             // is called before the setTimeout fires
-            window.GeolocationThrottle._timeoutIds[watchId] = timeoutId;
+            window.GeolocationThrottle._timeoutIds.set(watchId, timeoutId);
           }
         } else {
           // we already have a scheduled call
@@ -64,10 +64,10 @@
       navigator.geolocation.clearWatch(watchId);
 
       // if there's a scheduled watch position callback we'll clear it
-      const timeoutId = window.GeolocationThrottle._timeoutIds[watchId];
+      const timeoutId = window.GeolocationThrottle._timeoutIds.get(watchId);
       if (timeoutId) {
         clearTimeout(timeoutId);
-        window.GeolocationThrottle._timeoutIds[watchId] = null;
+        window.GeolocationThrottle._timeoutIds.delete(watchId);
       }
     }
   };
